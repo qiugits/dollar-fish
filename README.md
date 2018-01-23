@@ -26,6 +26,10 @@ This theme is based loosely on [bobthefish][bobthefish].
  * Visual indication that you can't write to the current directory.
 
 
+---
+Below is basically not changed from bobthefish.
+
+
 ### The Prompt
 
  * Flags:
@@ -146,7 +150,7 @@ end
 
 
 [fish]:       https://github.com/fish-shell/fish-shell
-[screencast]: 
+[screencast]: https://raw.githubusercontent.com/qiugits/dollar-fish/screencast.png
 [patching]:   https://powerline.readthedocs.org/en/master/installation.html#patched-fonts
 [fonts]:      https://github.com/Lokaltog/powerline-fonts
 [nerd-fonts]: https://github.com/ryanoasis/nerd-fonts
