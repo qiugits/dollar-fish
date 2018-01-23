@@ -1007,6 +1007,18 @@ end
 # ==============================
 
 function fish_right_prompt -d 'dollar is all about the right prompt'
+  # Cmd Duration
+  set -l __dollar_left_arrow_glyph '⟨'
+  #if [ "$theme_powerline_fonts" = "no" ]
+  #  set __dollar_left_arrow_glyph '⟨'
+  #end
+  set_color $fish_color_autosuggestion
+
+  __dollar_cmd_duration
+  #__dollar_timestamp
+  set_color normal
+
+
   # Save the last status for later (do this before the `set` calls below)
   set -l last_status $status
 
@@ -1141,418 +1153,6 @@ function fish_right_prompt -d 'dollar is all about the right prompt'
       # set -g __color_virtualfish           005faf cccccc --bold
       # set -g __color_virtualgo             005faf cccccc --bold
 
-    case 'terminal' 'terminal-dark*'
-      set -l colorfg black
-      [ $theme_color_scheme = 'terminal-dark-white' ]; and set colorfg white
-      set __color_initial_segment_exit     white red --bold
-      set __color_initial_segment_su       white green --bold
-      set __color_initial_segment_jobs     white blue --bold
-
-      set __color_path                     black white
-      set __color_path_basename            black white --bold
-      set __color_path_nowrite             magenta $colorfg
-      set __color_path_nowrite_basename    magenta $colorfg --bold
-
-      set __color_repo                     green $colorfg
-      set __color_repo_work_tree           black $colorfg --bold
-      set __color_repo_dirty               brred $colorfg
-      set __color_repo_staged              yellow $colorfg
-
-      set __color_vi_mode_default          brblue $colorfg --bold
-      set __color_vi_mode_insert           brgreen $colorfg --bold
-      set __color_vi_mode_visual           bryellow $colorfg --bold
-
-      set __color_vagrant                  brcyan $colorfg
-      set __color_k8s                      magenta white --bold
-      set __color_username                 white black --bold
-      set __color_hostname                 white black
-      set __color_rvm                      brmagenta $colorfg --bold
-      set __color_virtualfish              brblue $colorfg --bold
-      set __color_virtualgo                brblue $colorfg --bold
-
-    case 'terminal-light*'
-      set -l colorfg white
-      [ $theme_color_scheme = 'terminal-light-black' ]; and set colorfg black
-      set __color_initial_segment_exit     black red --bold
-      set __color_initial_segment_su       black green --bold
-      set __color_initial_segment_jobs     black blue --bold
-
-      set __color_path                     white black
-      set __color_path_basename            white black --bold
-      set __color_path_nowrite             magenta $colorfg
-      set __color_path_nowrite_basename    magenta $colorfg --bold
-
-      set __color_repo                     green $colorfg
-      set __color_repo_work_tree           white $colorfg --bold
-      set __color_repo_dirty               brred $colorfg
-      set __color_repo_staged              yellow $colorfg
-
-      set __color_vi_mode_default          brblue $colorfg --bold
-      set __color_vi_mode_insert           brgreen $colorfg --bold
-      set __color_vi_mode_visual           bryellow $colorfg --bold
-
-      set __color_vagrant                  brcyan $colorfg
-      set __color_k8s                      magenta white --bold
-      set __color_username                 black white --bold
-      set __color_hostname                 black white
-      set __color_rvm                      brmagenta $colorfg --bold
-      set __color_virtualfish              brblue $colorfg --bold
-      set __color_virtualgo                brblue $colorfg --bold
-
-    case 'terminal2' 'terminal2-dark*'
-      set -l colorfg black
-      [ $theme_color_scheme = 'terminal2-dark-white' ]; and set colorfg white
-      set __color_initial_segment_exit     grey red --bold
-      set __color_initial_segment_su       grey green --bold
-      set __color_initial_segment_jobs     grey blue --bold
-
-      set __color_path                     brgrey white
-      set __color_path_basename            brgrey white --bold
-      set __color_path_nowrite             magenta $colorfg
-      set __color_path_nowrite_basename    magenta $colorfg --bold
-
-      set __color_repo                     green $colorfg
-      set __color_repo_work_tree           brgrey $colorfg --bold
-      set __color_repo_dirty               brred $colorfg
-      set __color_repo_staged              yellow $colorfg
-
-      set __color_vi_mode_default          brblue $colorfg --bold
-      set __color_vi_mode_insert           brgreen $colorfg --bold
-      set __color_vi_mode_visual           bryellow $colorfg --bold
-
-      set __color_vagrant                  brcyan $colorfg
-      set __color_k8s                      magenta white --bold
-      set __color_username                 brgrey white --bold
-      set __color_hostname                 brgrey white
-      set __color_rvm                      brmagenta $colorfg --bold
-      set __color_virtualfish              brblue $colorfg --bold
-      set __color_virtualgo                brblue $colorfg --bold
-
-    case 'terminal2-light*'
-      set -l colorfg white
-      [ $theme_color_scheme = 'terminal2-light-black' ]; and set colorfg black
-      set __color_initial_segment_exit     brgrey red --bold
-      set __color_initial_segment_su       brgrey green --bold
-      set __color_initial_segment_jobs     brgrey blue --bold
-
-      set __color_path                     grey black
-      set __color_path_basename            grey black --bold
-      set __color_path_nowrite             magenta $colorfg
-      set __color_path_nowrite_basename    magenta $colorfg --bold
-
-      set __color_repo                     green $colorfg
-      set __color_repo_work_tree           grey $colorfg --bold
-      set __color_repo_dirty               brred $colorfg
-      set __color_repo_staged              yellow $colorfg
-
-      set __color_vi_mode_default          brblue $colorfg --bold
-      set __color_vi_mode_insert           brgreen $colorfg --bold
-      set __color_vi_mode_visual           bryellow $colorfg --bold
-
-      set __color_vagrant                  brcyan $colorfg
-      set __color_k8s                      magenta white --bold
-      set __color_username                 grey black --bold
-      set __color_hostname                 grey black
-      set __color_rvm                      brmagenta $colorfg --bold
-      set __color_virtualfish              brblue $colorfg --bold
-      set __color_virtualgo                brblue $colorfg --bold
-
-    case 'zenburn'
-      set -l grey   333333 # a bit darker than normal zenburn grey
-      set -l red    CC9393
-      set -l green  7F9F7F
-      set -l yellow E3CEAB
-      set -l orange DFAF8F
-      set -l blue   8CD0D3
-      set -l white  DCDCCC
-
-      set __color_initial_segment_exit     $white $red --bold
-      set __color_initial_segment_su       $white $green --bold
-      set __color_initial_segment_jobs     $white $blue --bold
-
-      set __color_path                     $grey $white
-      set __color_path_basename            $grey $white --bold
-      set __color_path_nowrite             $grey $red
-      set __color_path_nowrite_basename    $grey $red --bold
-
-      set __color_repo                     $green $grey
-      set __color_repo_work_tree           $grey $grey --bold
-      set __color_repo_dirty               $red $grey
-      set __color_repo_staged              $yellow $grey
-
-      set __color_vi_mode_default          $grey $yellow --bold
-      set __color_vi_mode_insert           $green $white --bold
-      set __color_vi_mode_visual           $yellow $grey --bold
-
-      set __color_vagrant                  $blue $green --bold
-      set __color_k8s                      $green $white --bold
-      set __color_username                 $grey $blue --bold
-      set __color_hostname                 $grey $blue
-      set __color_rvm                      $red $grey --bold
-      set __color_virtualfish              $blue $grey --bold
-      set __color_virtualgo                $blue $grey --bold
-
-    case 'base16-light'
-      set -l base00 181818
-      set -l base01 282828
-      set -l base02 383838
-      set -l base03 585858
-      set -l base04 b8b8b8
-      set -l base05 d8d8d8
-      set -l base06 e8e8e8
-      set -l base07 f8f8f8
-      set -l base08 ab4642 # red
-      set -l base09 dc9656 # orange
-      set -l base0A f7ca88 # yellow
-      set -l base0B a1b56c # green
-      set -l base0C 86c1b9 # cyan
-      set -l base0D 7cafc2 # blue
-      set -l base0E ba8baf # violet
-      set -l base0F a16946 # brown
-
-      set -l colorfg $base00
-
-      set __color_initial_segment_exit     $base02 $base08 --bold
-      set __color_initial_segment_su       $base02 $base0B --bold
-      set __color_initial_segment_jobs     $base02 $base0D --bold
-
-      set __color_path                     $base06 $base02
-      set __color_path_basename            $base06 $base01 --bold
-      set __color_path_nowrite             $base06 $base08
-      set __color_path_nowrite_basename    $base06 $base08 --bold
-
-      set __color_repo                     $base0B $colorfg
-      set __color_repo_work_tree           $base06 $colorfg --bold
-      set __color_repo_dirty               $base08 $colorfg
-      set __color_repo_staged              $base09 $colorfg
-
-      set __color_vi_mode_default          $base04 $colorfg --bold
-      set __color_vi_mode_insert           $base0B $colorfg --bold
-      set __color_vi_mode_visual           $base09 $colorfg --bold
-
-      set __color_vagrant                  $base0C $colorfg --bold
-      set __color_k8s                      $base06 $colorfg --bold
-      set __color_username                 $base02 $base0D --bold
-      set __color_hostname                 $base02 $base0D
-      set __color_rvm                      $base08 $colorfg --bold
-      set __color_virtualfish              $base0D $colorfg --bold
-      set __color_virtualgo                $base0D $colorfg --bold
-
-    case 'base16' 'base16-dark'
-      set -l base00 181818
-      set -l base01 282828
-      set -l base02 383838
-      set -l base03 585858
-      set -l base04 b8b8b8
-      set -l base05 d8d8d8
-      set -l base06 e8e8e8
-      set -l base07 f8f8f8
-      set -l base08 ab4642 # red
-      set -l base09 dc9656 # orange
-      set -l base0A f7ca88 # yellow
-      set -l base0B a1b56c # green
-      set -l base0C 86c1b9 # cyan
-      set -l base0D 7cafc2 # blue
-      set -l base0E ba8baf # violet
-      set -l base0F a16946 # brown
-
-      set -l colorfg $base07
-
-      set __color_initial_segment_exit     $base05 $base08 --bold
-      set __color_initial_segment_su       $base05 $base0B --bold
-      set __color_initial_segment_jobs     $base05 $base0D --bold
-
-      set __color_path                     $base02 $base05
-      set __color_path_basename            $base02 $base06 --bold
-      set __color_path_nowrite             $base02 $base08
-      set __color_path_nowrite_basename    $base02 $base08 --bold
-
-      set __color_repo                     $base0B $colorfg
-      set __color_repo_work_tree           $base02 $colorfg --bold
-      set __color_repo_dirty               $base08 $colorfg
-      set __color_repo_staged              $base09 $colorfg
-
-      set __color_vi_mode_default          $base03 $colorfg --bold
-      set __color_vi_mode_insert           $base0B $colorfg --bold
-      set __color_vi_mode_visual           $base09 $colorfg --bold
-
-      set __color_vagrant                  $base0C $colorfg --bold
-      set __color_k8s                      $base0B $colorfg --bold
-      set __color_username                 $base02 $base0D --bold
-      set __color_hostname                 $base02 $base0D
-      set __color_rvm                      $base08 $colorfg --bold
-      set __color_virtualfish              $base0D $colorfg --bold
-      set __color_virtualgo                $base0D $colorfg --bold
-
-    case 'solarized-light'
-      set -l base03  002b36
-      set -l base02  073642
-      set -l base01  586e75
-      set -l base00  657b83
-      set -l base0   839496
-      set -l base1   93a1a1
-      set -l base2   eee8d5
-      set -l base3   fdf6e3
-      set -l yellow  b58900
-      set -l orange  cb4b16
-      set -l red     dc322f
-      set -l magenta d33682
-      set -l violet  6c71c4
-      set -l blue    268bd2
-      set -l cyan    2aa198
-      set -l green   859900
-
-      set colorfg $base03
-
-      set __color_initial_segment_exit     $base02 $red --bold
-      set __color_initial_segment_su       $base02 $green --bold
-      set __color_initial_segment_jobs     $base02 $blue --bold
-
-      set __color_path                     $base2 $base00
-      set __color_path_basename            $base2 $base01 --bold
-      set __color_path_nowrite             $base2 $orange
-      set __color_path_nowrite_basename    $base2 $orange --bold
-
-      set __color_repo                     $green $colorfg
-      set __color_repo_work_tree           $base2 $colorfg --bold
-      set __color_repo_dirty               $red $colorfg
-      set __color_repo_staged              $yellow $colorfg
-
-      set __color_vi_mode_default          $blue $colorfg --bold
-      set __color_vi_mode_insert           $green $colorfg --bold
-      set __color_vi_mode_visual           $yellow $colorfg --bold
-
-      set __color_vagrant                  $violet $colorfg --bold
-      set __color_k8s                      $green $colorfg --bold
-      set __color_username                 $base2 $blue --bold
-      set __color_hostname                 $base2 $blue
-      set __color_rvm                      $red $colorfg --bold
-      set __color_virtualfish              $cyan $colorfg --bold
-      set __color_virtualgo                $cyan $colorfg --bold
-
-    case 'solarized' 'solarized-dark'
-      set -l base03  002b36
-      set -l base02  073642
-      set -l base01  586e75
-      set -l base00  657b83
-      set -l base0   839496
-      set -l base1   93a1a1
-      set -l base2   eee8d5
-      set -l base3   fdf6e3
-      set -l yellow  b58900
-      set -l orange  cb4b16
-      set -l red     dc322f
-      set -l magenta d33682
-      set -l violet  6c71c4
-      set -l blue    268bd2
-      set -l cyan    2aa198
-      set -l green   859900
-
-      set colorfg $base3
-
-      set __color_initial_segment_exit     $base2 $red --bold
-      set __color_initial_segment_su       $base2 $green --bold
-      set __color_initial_segment_jobs     $base2 $blue --bold
-
-      set __color_path                     $base02 $base0
-      set __color_path_basename            $base02 $base1 --bold
-      set __color_path_nowrite             $base02 $orange
-      set __color_path_nowrite_basename    $base02 $orange --bold
-
-      set __color_repo                     $green $colorfg
-      set __color_repo_work_tree           $base02 $colorfg --bold
-      set __color_repo_dirty               $red $colorfg
-      set __color_repo_staged              $yellow $colorfg
-
-      set __color_vi_mode_default          $blue $colorfg --bold
-      set __color_vi_mode_insert           $green $colorfg --bold
-      set __color_vi_mode_visual           $yellow $colorfg --bold
-
-      set __color_vagrant                  $violet $colorfg --bold
-      set __color_k8s                      $green $colorfg --bold
-      set __color_username                 $base02 $blue --bold
-      set __color_hostname                 $base02 $blue
-      set __color_rvm                      $red $colorfg --bold
-      set __color_virtualfish              $cyan $colorfg --bold
-      set __color_virtualgo                $cyan $colorfg --bold
-
-    case 'light'
-      #               light  medium dark
-      #               ------ ------ ------
-      set -l red      cc9999 ce000f 660000
-      set -l green    addc10 189303 0c4801
-      set -l blue     48b4fb 005faf 255e87
-      set -l orange   f6b117 unused 3a2a03
-      set -l brown    bf5e00 803f00 4d2600
-      set -l grey     cccccc 999999 333333
-      set -l white    ffffff
-      set -l black    000000
-      set -l ruby_red af0000
-
-      set __color_initial_segment_exit     $grey[3] $red[2] --bold
-      set __color_initial_segment_su       $grey[3] $green[2] --bold
-      set __color_initial_segment_jobs     $grey[3] $blue[3] --bold
-
-      set __color_path                     $grey[1] $grey[2]
-      set __color_path_basename            $grey[1] $grey[3] --bold
-      set __color_path_nowrite             $red[1] $red[3]
-      set __color_path_nowrite_basename    $red[1] $red[3] --bold
-
-      set __color_repo                     $green[1] $green[3]
-      set __color_repo_work_tree           $grey[1] $white --bold
-      set __color_repo_dirty               $red[2] $white
-      set __color_repo_staged              $orange[1] $orange[3]
-
-      set __color_vi_mode_default          $grey[2] $grey[3] --bold
-      set __color_vi_mode_insert           $green[2] $grey[3] --bold
-      set __color_vi_mode_visual           $orange[1] $orange[3] --bold
-
-      set __color_vagrant                  $blue[1] $white --bold
-      set __color_k8s                      $green[1] $colorfg --bold
-      set __color_username                 $grey[1] $blue[3] --bold
-      set __color_hostname                 $grey[1] $blue[3]
-      set __color_rvm                      $ruby_red $grey[1] --bold
-      set __color_virtualfish              $blue[2] $grey[1] --bold
-      set __color_virtualgo                $blue[2] $grey[1] --bold
-
-    case 'gruvbox'
-      #               light  medium  dark  darkest
-      #               ------ ------ ------ -------
-      set -l red      fb4934 cc241d
-      set -l green    b8bb26 98971a
-      set -l yellow   fabd2f d79921
-      set -l aqua     8ec07c 689d6a
-      set -l blue     83a598 458588
-      set -l grey     cccccc 999999 333333
-      set -l fg       fbf1c7 ebdbb2 d5c4a1 a89984
-      set -l bg       504945 282828
-
-      set __color_initial_segment_exit  $fg[1] $red[2] --bold
-      set __color_initial_segment_su    $fg[1] $green[2] --bold
-      set __color_initial_segment_jobs  $fg[1] $aqua[2] --bold
-
-      set __color_path                  $bg[1] $fg[2]
-      set __color_path_basename         $bg[1] $fg[2] --bold
-      set __color_path_nowrite          $red[1] $fg[2]
-      set __color_path_nowrite_basename $red[1] $fg[2] --bold
-
-      set __color_repo                  $green[2] $bg[1]
-      set __color_repo_work_tree        $bg[1] $fg[2] --bold
-      set __color_repo_dirty            $red[2] $fg[2]
-      set __color_repo_staged           $yellow[1] $bg[1]
-
-      set __color_vi_mode_default       $fg[4] $bg[2] --bold
-      set __color_vi_mode_insert        $blue[1] $bg[2] --bold
-      set __color_vi_mode_visual        $yellow[1] $bg[2] --bold
-
-      set __color_vagrant               $blue[2] $fg[2] --bold
-      set __color_k8s                   $green[2] $fg[2] --bold
-      set __color_username              $fg[3] $blue[2] --bold
-      set __color_hostname              $fg[3] $blue[2]
-      set __color_rvm                   $red[2] $fg[2] --bold
-      set __color_virtualfish           $blue[2] $fg[2] --bold
-      set __color_virtualgo             $blue[2] $fg[2] --bold
-
     case '*' # default dark theme
       #               light  medium dark
       #               ------ ------ ------
@@ -1600,7 +1200,7 @@ function fish_right_prompt -d 'dollar is all about the right prompt'
   __dollar_maybe_display_colors
 
   # Status flags and input mode
-  __dollar_prompt_status $last_status
+  __dollar_prompt_status $last_status  # TODO: alter.
   __dollar_prompt_vi
 
   # Containers and VMs
@@ -1620,6 +1220,8 @@ function fish_right_prompt -d 'dollar is all about the right prompt'
   set -l git_root (__dollar_git_project_dir)
   set -l hg_root  (__dollar_hg_project_dir)
 
+  # Git
+  # TODO: alter.
   if [ "$git_root" -a "$hg_root" ]
     # only show the closest parent
     switch $git_root
@@ -1637,18 +1239,4 @@ function fish_right_prompt -d 'dollar is all about the right prompt'
   end
 
   __dollar_finish_segments
-
-# ==================
-# Fish Right Prompt
-# ==================
-  set -l __dollar_left_arrow_glyph '⟨'
-  if [ "$theme_powerline_fonts" = "no" ]
-    set __dollar_left_arrow_glyph '⟨'
-  end
-
-  set_color $fish_color_autosuggestion
-
-  __dollar_cmd_duration
-  __dollar_timestamp
-  set_color normal
 end
