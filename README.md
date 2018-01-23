@@ -6,7 +6,7 @@
 What is GitHub badge: https://gist.github.com/lukas-h/2a5d00690736b4c3a7ba
 Where to create one:  http://shields.io
 -->
-[![GitHub license](https://img.shields.io/github/license/qiugits/dollar-fish.svg)](https://github.com/qiugits/dollar-fish/LICENSE)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/qiugits/dollar-fish.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fqiugits%2Fdollar-fish)
 ![dollar][screencast]
 
