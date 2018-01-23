@@ -1,6 +1,6 @@
 # dollar
 
-`dollar` is a Powerline-style, Git-aware [fish][fish] theme optimized for awesome.
+`dollar` is a minimalist, yet Git-aware [fish][fish] theme optimized for awesome.
 
 <!--
 What is GitHub badge: https://gist.github.com/lukas-h/2a5d00690736b4c3a7ba
