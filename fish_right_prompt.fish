@@ -58,8 +58,8 @@ function __dollar_dirname -d 'basically dirname, but faster'
 end
 
 function __dollar_git_branch -S -d 'Get the current git branch (or commitish)'
-  set -l ref (command git symbolic-ref HEAD ^/dev/null)
-    and string replace 'refs/heads/' "$__dollar_branch_glyph " $ref
+  set -l ref (command git symbolic-ref HEAD ^/dev/null)  # ex: $ref => 'refs/heads/master'
+    and string replace 'refs/heads/' " $__dollar_branch_glyph " $ref  # whether to insert space here: ~/w/p/dollar-fish**master
     and return
 
   set -l tag (command git describe --tags --exact-match ^/dev/null)
@@ -73,7 +73,7 @@ end
 function __dollar_hg_branch -S -d 'Get the current hg branch'
   set -l branch (command hg branch ^/dev/null)
   set -l book (command hg book | command grep \* | cut -d\  -f3)
-  echo "$__dollar_branch_glyph $branch @ $book"
+  echo "$__dollar_branch_glyph$branch @ $book"
 end
 
 function __dollar_pretty_parent -S -a current_dir -d 'Print a parent directory, shortened to fit the prompt'
@@ -86,12 +86,12 @@ function __dollar_pretty_parent -S -a current_dir -d 'Print a parent directory, 
 
   # Must check whether `$parent_dir = /` if using native dirname
   if [ -z "$parent_dir" ]
-    echo -n /
+    echo -ns /  # unnessary -s ?
     return
   end
 
   if [ $fish_prompt_pwd_dir_length -eq 0 ]
-    echo -n "$parent_dir/"
+    echo -ns "$parent_dir/"  # unnessary -s ?
     return
   end
 
@@ -183,7 +183,7 @@ function __dollar_project_pwd -S -a current_dir -d 'Print the working directory 
   set -l project_dir (string replace -r '^'"$current_dir"'($|/)' '' $PWD)
 
   if [ $theme_project_dir_length -eq 0 ]
-    echo -n $project_dir
+    echo -ns $project_dir  # unnessary -s ?
     return
   end
 
@@ -259,14 +259,14 @@ function __dollar_start_segment -S -d 'Start a prompt segment'
   switch "$__dollar_current_bg"
     case ''
       # If there's no background, just start one
-      echo -n ' '
+      echo -ns ''  # ' '
     case "$bg"
       # If the background is already the same color, draw a separator
-      echo -ns $__dollar_right_arrow_glyph ' '
+      echo -ns $__dollar_right_arrow_glyph  # ' '
     case '*'
       # otherwise, draw the end of the previous segment and the start of the next
       set_color $__dollar_current_bg
-      echo -ns $__dollar_right_black_arrow_glyph ' '
+      echo -ns $__dollar_right_black_arrow_glyph  # ' '
       set_color $fg $argv
   end
 
@@ -297,16 +297,16 @@ function __dollar_path_segment -S -a current_dir -d 'Display a shortened form of
       set directory (__dollar_basename "$current_dir")
   end
 
-  echo -n $parent
+  echo -ns $parent  # unnessary -s ?
   set_color -b $segment_basename_color
-  echo -ns $directory ' '
+  echo -ns $directory  # ' '
 end
 
 function __dollar_finish_segments -S -d 'Close open prompt segments'
   if [ -n "$__dollar_current_bg" ]
     set_color normal
     set_color $__dollar_current_bg
-    echo -ns $__dollar_right_black_arrow_glyph ' '
+    echo -ns $__dollar_right_black_arrow_glyph  # ' '
   end
 
   if [ "$theme_newline_cursor" = 'yes' ]
@@ -361,7 +361,7 @@ function __dollar_prompt_status -S -a last_status -d 'Display flags for a non-ze
       if [ "$theme_show_exit_status" = 'yes' ]
         echo -ns $last_status ' '
       else
-        echo -n $__dollar_nonzero_exit_glyph
+        echo -ns $__dollar_nonzero_exit_glyph  # unnessary -s ?
       end
     end
 
@@ -373,13 +373,13 @@ function __dollar_prompt_status -S -a last_status -d 'Display flags for a non-ze
         set_color -b $__color_initial_segment_exit
       end
 
-      echo -n $__dollar_superuser_glyph
+      echo -ns $__dollar_superuser_glyph  # unnessary -s ?
     end
 
     if [ "$bg_jobs" ]
       set_color normal
       set_color -b $__color_initial_segment_jobs
-      echo -n $__dollar_bg_job_glyph
+      echo -ns $__dollar_bg_job_glyph  # unnessary -s ?
     end
   end
 end
@@ -719,12 +719,12 @@ function __dollar_prompt_git -S -a current_dir -d 'Display the actual git state'
   if [ "$theme_display_git_dirty" != 'no' ]
     set -l show_dirty (command git config --bool bash.showDirtyState ^/dev/null)
     if [ "$show_dirty" != 'false' ]
-      set dirty (command git diff --no-ext-diff --quiet --exit-code ^/dev/null; or echo -n "$__dollar_git_dirty_glyph")
+      set dirty (command git diff --no-ext-diff --quiet --exit-code ^/dev/null; or echo -ns "$__dollar_git_dirty_glyph")  # unnessary -s ?
     end
   end
 
-  set -l staged  (command git diff --cached --no-ext-diff --quiet --exit-code ^/dev/null; or echo -n "$__dollar_git_staged_glyph")
-  set -l stashed (command git rev-parse --verify --quiet refs/stash >/dev/null; and echo -n "$__dollar_git_stashed_glyph")
+  set -l staged  (command git diff --cached --no-ext-diff --quiet --exit-code ^/dev/null; or echo -ns "$__dollar_git_staged_glyph")  # unnessary -s ?
+  set -l stashed (command git rev-parse --verify --quiet refs/stash >/dev/null; and echo -ns "$__dollar_git_stashed_glyph")  # unnessary -s ?
   set -l ahead   (__dollar_git_ahead)
 
   set -l new ''
@@ -740,7 +740,7 @@ function __dollar_prompt_git -S -a current_dir -d 'Display the actual git state'
 
   set -l flags "$dirty$staged$stashed$ahead$new"
   [ "$flags" ]
-    and set flags " $flags"
+    and set flags " $flags"  # whether to add space here: ~/w/p/dollar-fishmaster(!)*/...
 
   set -l flag_colors $__color_repo
   if [ "$dirty" ]
@@ -752,7 +752,7 @@ function __dollar_prompt_git -S -a current_dir -d 'Display the actual git state'
   __dollar_path_segment $current_dir
 
   __dollar_start_segment $flag_colors
-  echo -ns (__dollar_git_branch) $flags ' '
+  echo -ns (__dollar_git_branch) $flags  # ' '
   set_color normal
 
   if [ "$theme_git_worktree_support" != 'yes' ]
@@ -764,7 +764,7 @@ function __dollar_prompt_git -S -a current_dir -d 'Display the actual git state'
         __dollar_start_segment $__color_path_nowrite
       end
 
-      echo -ns $project_pwd ' '
+      echo -ns '/' $project_pwd  # ' '  # no space after project working directory
     end
     return
   end
@@ -795,18 +795,18 @@ function __dollar_prompt_git -S -a current_dir -d 'Display the actual git state'
     if [ "$work_dir" ]
       set -l work_parent (__dollar_dirname $work_dir)
       if [ "$work_parent" ]
-        echo -n "$work_parent/"
+        echo -ns "$work_parent/"  # unnessary -s ?
       end
       set_color normal
       set_color -b $__color_repo_work_tree
-      echo -n (__dollar_basename $work_dir)
+      echo -ns (__dollar_basename $work_dir)  # unnessary -s ?
       set_color normal
       set_color -b $colors
       [ "$project_pwd" ]
-        and echo -n '/'
+        and echo -ns '/'  # unnessary -s ?
     end
 
-    echo -ns $project_pwd ' '
+    echo -ns $project_pwd  # ' '
   else
     set project_pwd $PWD
     string match "$current_dir*" $project_pwd >/dev/null
@@ -821,7 +821,7 @@ function __dollar_prompt_git -S -a current_dir -d 'Display the actual git state'
 
       __dollar_start_segment $colors
 
-      echo -ns $project_pwd ' '
+      echo -ns $project_pwd  # ' '
     end
   end
 end
@@ -1024,10 +1024,10 @@ function fish_right_prompt -d 'dollar is all about the right prompt'
 
   # Powerline glyphs
   set -l __dollar_branch_glyph            \uE0A0
-  set -l __dollar_right_black_arrow_glyph \uE0B0
-  set -l __dollar_right_arrow_glyph       \uE0B1
-  set -l __dollar_left_black_arrow_glyph  \uE0B2
-  set -l __dollar_left_arrow_glyph        \uE0B3
+  set -l __dollar_right_black_arrow_glyph ''  # \uE0B0
+  set -l __dollar_right_arrow_glyph       ''  # \uE0B1
+  set -l __dollar_left_black_arrow_glyph  ''  # \uE0B2
+  set -l __dollar_left_arrow_glyph        ''  # \uE0B3
 
   # Additional glyphs
   set -l __dollar_detached_glyph          \u27A6
@@ -1066,7 +1066,7 @@ function fish_right_prompt -d 'dollar is all about the right prompt'
 
   # Disable Powerline fonts
   if [ "$theme_powerline_fonts" = "no" ]
-    set __dollar_branch_glyph            \u2387
+    set __dollar_branch_glyph            \u2387  # ⎇
     set __dollar_right_black_arrow_glyph ''
     set __dollar_right_arrow_glyph       ''
     set __dollar_left_black_arrow_glyph  ''
@@ -1162,30 +1162,30 @@ function fish_right_prompt -d 'dollar is all about the right prompt'
       set -l orange   f6b117 unused 3a2a03
       set -l brown    bf5e00 803f00 4d2600
       set -l grey     cccccc 999999 333333
-      set -l white    ffffff
+      set -l white    ffffff eeeeee dddddd
       set -l black    000000
       set -l ruby_red af0000
 
-      set __color_initial_segment_exit     $white $red[2] --bold
-      set __color_initial_segment_su       $white $green[2] --bold
-      set __color_initial_segment_jobs     $white $blue[3] --bold
+      set __color_initial_segment_exit     $white[1] $red[2] --bold
+      set __color_initial_segment_su       $white[1] $green[2] --bold
+      set __color_initial_segment_jobs     $white[1] $blue[3] --bold
 
       set __color_path                     $grey[3] $grey[2]
-      set __color_path_basename            $grey[3] $white --bold
+      set __color_path_basename            $grey[3] $white[3] --bold # $grey[3] $white[1] --bold
       set __color_path_nowrite             $red[3] $red[1]
       set __color_path_nowrite_basename    $red[3] $red[1] --bold
 
-      set __color_repo                     $green[1] $green[3]
-      set __color_repo_work_tree           $grey[3] $white --bold
-      set __color_repo_dirty               $red[2] $white
-      set __color_repo_staged              $orange[1] $orange[3]
+      set __color_repo                     $grey[3] $green[1] # $green[1] $green[3]
+      set __color_repo_work_tree           $grey[3] $grey[1] # $grey[3] $white[1] --bold
+      set __color_repo_dirty               $grey[3] $red[2] # $red[2] $white[1]
+      set __color_repo_staged              $grey[3] $orange[1] # $orange[1] $orange[3]
 
       set __color_vi_mode_default          $grey[2] $grey[3] --bold
       set __color_vi_mode_insert           $green[2] $grey[3] --bold
       set __color_vi_mode_visual           $orange[1] $orange[3] --bold
 
-      set __color_vagrant                  $blue[1] $white --bold
-      set __color_k8s                      $green[2] $white --bold
+      set __color_vagrant                  $blue[1] $white[1] --bold
+      set __color_k8s                      $green[2] $white[1] --bold
       set __color_username                 $grey[1] $blue[3] --bold
       set __color_hostname                 $grey[1] $blue[3]
       set __color_rvm                      $ruby_red $grey[1] --bold
@@ -1221,7 +1221,6 @@ function fish_right_prompt -d 'dollar is all about the right prompt'
   set -l hg_root  (__dollar_hg_project_dir)
 
   # Git
-  # TODO: alter.
   if [ "$git_root" -a "$hg_root" ]
     # only show the closest parent
     switch $git_root
