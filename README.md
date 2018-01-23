@@ -150,7 +150,7 @@ end
 
 
 [fish]:       https://github.com/fish-shell/fish-shell
-[screencast]: https://raw.githubusercontent.com/qiugits/dollar-fish/screencast.png
+[screencast]: screencast.png
 [patching]:   https://powerline.readthedocs.org/en/master/installation.html#patched-fonts
 [fonts]:      https://github.com/Lokaltog/powerline-fonts
 [nerd-fonts]: https://github.com/ryanoasis/nerd-fonts
